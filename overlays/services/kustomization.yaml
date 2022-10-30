@@ -1,0 +1,5 @@
+bases:
+- ../../infrastructure/
+- ../../storage/services/
+- ../../apps/staging/
+- ../../apps/production/

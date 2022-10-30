@@ -1,0 +1,32 @@
+name: 'Check kustomize files'
+on:
+- pull_request
+jobs:
+  kustomize-cluster-services:
+    name: "Check kustomize files for Services cluster"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+        repository: '${{ github.event.pull_request.base.repo.full_name }}'
+        ref: '${{ github.event.pull_request.base.ref }}'
+        path: base
+    - uses: int128/kustomize-action@v1
+      id: kustomize-head
+      with:
+        kustomization: overlays/services/kustomization.yaml
+        write-individual-files: true
+    - uses: int128/kustomize-action@v1
+      id: kustomize-base
+      with:
+        base-directory: base
+        kustomization: overlays/services/kustomization.yaml
+        write-individual-files: true
+    - uses: int128/diff-action@v1
+      with:
+        base: ${{ steps.kustomize-base.outputs.directory }}
+        head: ${{ steps.kustomize-head.outputs.directory }}

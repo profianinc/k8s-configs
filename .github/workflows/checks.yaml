@@ -3,8 +3,12 @@ on:
 - pull_request
 jobs:
   kustomize-cluster-services:
-    name: "Check kustomize files for Services cluster"
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        cluster:
+        - services
+    name: "clusters / ${{ matrix.cluster }}"
     steps:
     - uses: actions/checkout@v3
       with:
@@ -18,13 +22,13 @@ jobs:
     - uses: int128/kustomize-action@v1
       id: kustomize-head
       with:
-        kustomization: overlays/services/kustomization.yaml
+        kustomization: "overlays/${{ matrix.cluster }}/kustomization.yaml"
         write-individual-files: true
     - uses: int128/kustomize-action@v1
       id: kustomize-base
       with:
         base-directory: base
-        kustomization: overlays/services/kustomization.yaml
+        kustomization: "overlays/${{ matrix.cluster }}/kustomization.yaml"
         write-individual-files: true
     - uses: int128/diff-action@v1
       with:

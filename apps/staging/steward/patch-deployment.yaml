@@ -4,10 +4,11 @@ metadata:
   name: steward
 spec:
   replicas: 1
+  foo
   template:
     spec:
       containers:
       - name: steward
-        image: ghcr.io/profianinc/steward:main
+        image: ghcr.io/profianinc/steward:test
         # main is a rolling branch, make sure to always re-pull
         imagePullPolicy: Always

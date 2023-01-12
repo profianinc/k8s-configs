@@ -7,6 +7,5 @@ spec:
     spec:
       containers:
       - name: steward
-        image: ghcr.io/profianinc/steward:main
-        # main is a rolling branch, make sure to always re-pull
+        image: ghcr.io/profianinc/steward:v0.2.0-rc2
         imagePullPolicy: Always

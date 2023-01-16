@@ -7,5 +7,5 @@ spec:
     spec:
       containers:
       - name: steward
-        image: ghcr.io/profianinc/steward:0.2.0-rc2
-        imagePullPolicy: Always
+        image: ghcr.io/profianinc/steward@sha256:f60eeb8a33dda5c6a48c69cc52868f7473bf306940848b01885dd2c0f37371a3
+        imagePullPolicy: IfNotPresent

@@ -3,26 +3,11 @@ kind: Deployment
 metadata:
   name: drawbridge
 spec:
-  replicas: 2
+  replicas: 3
   template:
     spec:
       containers:
       - name: drawbridge
-        # Temporarily deploy an old release to prior to the OIDC fix
-        image: ghcr.io/profianinc/drawbridge@sha256:67d28c4c731fb4de679893f0c2df6b1d0debccf8ee42c96b943a07fd41bae1d1
+        # Temporarily deploy main to merge #361
+        image: ghcr.io/profianinc/drawbridge@sha256:d303a0e8486868d7f328dd0348e9883bdd2b26404078e16227215e58f09a7082
         imagePullPolicy: Always
-        args:
-        - "--addr=0.0.0.0:8080"
-        - "--ca=/data/config/ca.crt"
-        - "--cert=/data/tls/tls.crt"
-        - "--key=/data/tls/tls.key"
-        - "--oidc-issuer=$(OIDC_ISSUER)"
-        - "--oidc-client=$(OIDC_CLIENT)"
-        - "--oidc-label=auth.profian.com"
-        - "--store=/data/store"
-        env:
-        - name: OIDC_CLIENT
-          valueFrom:
-            configMapKeyRef:
-              name: drawbridge-config
-              key: oidc_client

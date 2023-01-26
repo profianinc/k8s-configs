@@ -14,6 +14,7 @@ from yaml import safe_load, safe_dump
 CHECK_SLEEP = 10
 MAX_PR_WAIT = 60
 MAIN_BRANCH = "main"
+SIGNED_OFF_BY = "Automated Upgrade <infrastructure@profian.com"
 REQUIRED_CHECKS_PR = [
     "clusters / services"
 ]
@@ -65,7 +66,7 @@ def commit(repo, filename, environment, service, new_version):
         print("No changes, skipping commit", flush=True)
         return False
 
-    repo.index.commit(f"Upgrade {service} to {new_version} in {environment}")
+    repo.index.commit(create_body(service, new_version, environment))
 
     print(f"Commit created: {repo.head.commit}", flush=True)
 
@@ -79,10 +80,18 @@ def push(repo, branch_name):
     print("Pushed branch to GitHub", flush=True)
 
 
+def create_body(service, new_version, environment):
+    return (f"Upgrade {service} to {new_version} in {environment}\n"
+            "\n"
+            "This PR was automatically created by the upgrade workflow.\n"
+            "\n"
+            f"Signed-Off-By: {SIGNED_OFF_BY}")
+
+
 def create_pr(gh_repo, branchname, environment, service, new_version):
     pr = gh_repo.create_pull(
         title=f"Upgrade {service} to {new_version} in {environment}",
-        body=f"Upgrade {service} to {new_version} in {environment}",
+        body=create_body(service, new_version, environment),
         head=branchname,
         base=MAIN_BRANCH,
     )

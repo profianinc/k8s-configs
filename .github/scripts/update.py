@@ -218,7 +218,7 @@ def main():
     service, git_ref, image_digest = sys.argv[1:]
 
     if git_ref.startswith('refs/tags/'):
-        new_version = git_ref[10:]
+        new_version = git_ref[10:].lstrip("v")
         print(f"Updating {service} to released version {new_version}", flush=True)
         image_tag = f"ghcr.io/profianinc/{service}:{new_version}"
         if "-rc" in new_version:

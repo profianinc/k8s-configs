@@ -253,6 +253,10 @@ def main():
         print("Usage: upgrade.py <service> <git_ref> <image_digest>")
         sys.exit(1)
     service, git_ref, image_digest = sys.argv[1:]
+    print(f"Called with service: {service}, git_ref: {git_ref}, image_digest: {image_digest}")
+
+    if not image_digest.startswith("sha256:"):
+        raise Exception("Image digest seems to be wrong")
 
     if git_ref.startswith('refs/tags/'):
         new_version = git_ref[10:].lstrip("v")

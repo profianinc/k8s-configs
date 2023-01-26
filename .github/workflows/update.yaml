@@ -35,6 +35,6 @@ jobs:
         UPDATER_APP_INSTALL_ID: ${{ secrets.UPDATER_APP_INSTALL_ID }}
       run: |
         python .github/scripts/update.py \
-          ${{ github.event.inputs.component }} \
-          ${{ github.event.inputs.git_ref }} \
-          ${{ github.event.inputs.image_digest }}
+          "${{ github.event.inputs.component }}" \
+          "${{ github.event.inputs.git_ref }}" \
+          "${{ github.event.inputs.image_digest }}"

@@ -175,7 +175,7 @@ def wait_for_commit_checks(commit, required_checks):
 
 def merge_pr(pr, github, branchname):
     print("Merging PR", flush=True)
-    result = pr.merge()
+    result = pr.merge(merge_method="rebase")
     if not result.merged:
         raise Exception(f"PR merge failed: {result}")
 

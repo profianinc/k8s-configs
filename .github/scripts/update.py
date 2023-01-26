@@ -85,7 +85,7 @@ def create_body(service, new_version, environment):
             "\n"
             "This PR was automatically created by the upgrade workflow.\n"
             "\n"
-            f"Signed-Off-By: {SIGNED_OFF_BY}")
+            f"Signed-off-by: {SIGNED_OFF_BY}")
 
 
 def create_pr(gh_repo, branchname, environment, service, new_version):

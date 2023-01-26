@@ -14,7 +14,7 @@ from yaml import safe_load, safe_dump
 CHECK_SLEEP = 10
 MAX_PR_WAIT = 60
 MAIN_BRANCH = "main"
-SIGNED_OFF_BY = "Automated Upgrade <infrastructure@profian.com"
+SIGNED_OFF_BY = "Automated Upgrade <infrastructure@profian.com>"
 REQUIRED_CHECKS_PR = [
     "clusters / services"
 ]

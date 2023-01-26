@@ -202,10 +202,10 @@ def perform_environment(repo, github, environment, service, new_version, image_t
     push(repo, branchname)
     pr = create_pr(github, branchname, environment, service, new_version)
     pr_head = get_pr_head(pr)
-    wait_for_commit_checks(pr_head, REQUIRED_CHECKS_PR)
     if environment == "production":
         print("Not merging PR to production", flush=True)
         return
+    wait_for_commit_checks(pr_head, REQUIRED_CHECKS_PR)
     merge_pr(pr, github, branchname)
 
     main_git_ref = github.get_git_ref(f"heads/{MAIN_BRANCH}")

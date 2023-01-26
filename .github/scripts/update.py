@@ -17,6 +17,14 @@ MAX_PR_WAIT = 60
 MAIN_BRANCH = "main"
 AUTHOR_NAME = "Automated Update"
 AUTHOR_EMAIL = "infrastructure@profian.com"
+BODY_PRODUCTION = """This PR is for a production environment.
+It will *not* be automatically merged.
+Please review and merge manually.
+"""
+BODY_NON_PROD = """This PR is for a non-production environment.
+It will be automatically merged if all checks pass.
+If this PR is not merged within 24 hours, it will be closed.
+"""
 REQUIRED_CHECKS_PR = [
     "clusters / services"
 ]
@@ -107,6 +115,11 @@ def create_pr(gh_repo, branchname, environment, service, new_version):
     )
 
     print(f"Created pull request {pr}", flush=True)
+
+    if environment == "production":
+        pr.create_issue_comment(BODY_PRODUCTION)
+    else:
+        pr.create_issue_comment(BODY_NON_PROD)
 
     return pr
 

@@ -6,6 +6,7 @@ import urllib.parse
 
 import jwt
 from git import Repo
+from git.util import Actor
 from github import Github
 import requests
 from yaml import safe_load, safe_dump
@@ -14,7 +15,8 @@ from yaml import safe_load, safe_dump
 CHECK_SLEEP = 10
 MAX_PR_WAIT = 60
 MAIN_BRANCH = "main"
-SIGNED_OFF_BY = "Automated Upgrade <infrastructure@profian.com>"
+AUTHOR_NAME = "Automated Update"
+AUTHOR_EMAIL = "infrastructure@profian.com"
 REQUIRED_CHECKS_PR = [
     "clusters / services"
 ]
@@ -66,7 +68,11 @@ def commit(repo, filename, environment, service, new_version):
         print("No changes, skipping commit", flush=True)
         return False
 
-    repo.index.commit(create_body(service, new_version, environment))
+    repo.index.commit(
+        create_body(service, new_version, environment),
+        author=get_author(),
+        committer=get_author(),
+    )
 
     print(f"Commit created: {repo.head.commit}", flush=True)
 
@@ -80,12 +86,16 @@ def push(repo, branch_name):
     print("Pushed branch to GitHub", flush=True)
 
 
+def get_author():
+    return Actor(AUTHOR_NAME, AUTHOR_EMAIL)
+
+
 def create_body(service, new_version, environment):
     return (f"Upgrade {service} to {new_version} in {environment}\n"
             "\n"
             "This PR was automatically created by the upgrade workflow.\n"
             "\n"
-            f"Signed-off-by: {SIGNED_OFF_BY}")
+            f"Signed-off-by: {AUTHOR_NAME} <{AUTHOR_EMAIL}>")
 
 
 def create_pr(gh_repo, branchname, environment, service, new_version):

@@ -8,6 +8,7 @@ import jwt
 from git import Repo
 from git.util import Actor
 from github import Github
+from github.GithubException import UnknownObjectException
 import requests
 from yaml import safe_load, safe_dump
 
@@ -179,8 +180,12 @@ def merge_pr(pr, github, branchname):
     if not result.merged:
         raise Exception(f"PR merge failed: {result}")
 
-    git_ref = github.get_git_ref(f"heads/{branchname}")
-    git_ref.delete()
+    try:
+        git_ref = github.get_git_ref(f"heads/{branchname}")
+        git_ref.delete()
+    except UnknownObjectException:
+        print("Branch already deleted", flush=True)
+        pass
 
 
 def perform_environment(repo, github, environment, service, new_version, image_tag):
